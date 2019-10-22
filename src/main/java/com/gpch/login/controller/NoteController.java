@@ -3,11 +3,14 @@ package com.gpch.login.controller;
 
 import com.gpch.login.exception.ResourceNotFoundException;
 import com.gpch.login.model.Note;
+import com.gpch.login.model.User;
 import com.gpch.login.repository.NoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -24,10 +27,10 @@ public class NoteController {
         return noteRepository.findAll();
     }
 
-    @PostMapping("/notes")
-    public Note createNote(@Valid @RequestBody Note note) {
-        return noteRepository.save(note);
-    }
+//    @PostMapping("/notes")
+//    public Note createNote(@Valid @RequestBody Note note) {
+//        return noteRepository.save(note);
+//    }
 
     @GetMapping("/notes/{id}")
     public Note getNoteById(@PathVariable(value = "id") Long noteId) {
@@ -58,5 +61,14 @@ public class NoteController {
         noteRepository.delete(note);
 
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/notes", method = RequestMethod.POST)
+    public ModelAndView createNewNotes(@Valid Note note, BindingResult bindingResult) {
+        ModelAndView modelAndView = new ModelAndView();
+        noteRepository.save(note);
+        modelAndView.addObject("note", new Note());
+        modelAndView.setViewName("notes");
+        return modelAndView;
     }
 }
