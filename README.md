@@ -1,4 +1,4 @@
-## Spring Security Login Tutorial
+## Spring Security Login
 
 1. `mvn clean`
 2. `mvn clean install`
